@@ -1,12 +1,18 @@
 import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 const port = 3000;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+app.set("views", path.join(__dirname, "views"));
 
 app.get("/", async (req, res) => {
   try {
@@ -43,7 +49,6 @@ app.post("/", async (req, res) => {
     const singleRandomFilterRequest = response[randomFilterRequests];
 
     res.render("index.ejs", { data: singleRandomFilterRequest });
-    
   } catch (error) {
     console.error("Error 404! No activities that match your request");
     res.render("index.ejs", {
